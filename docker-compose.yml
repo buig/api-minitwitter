@@ -1,0 +1,18 @@
+services:
+  web:
+    image: buig/sf-php8.2-apache
+    container_name: minitw
+    volumes:
+      - .:/code
+      - ./provisioning/sites-enabled:/etc/apache2/sites-enabled
+    env_file:
+      - .env.webapp
+    ports:
+      - 8082:80
+    networks:
+      - edu-shared
+    tty: true
+
+networks:
+  edu-shared:
+    external: true
