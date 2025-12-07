@@ -1,0 +1,471 @@
+{
+	"info": {
+		"_postman_id": "495d5412-bb70-4151-a183-3a5a71e13425",
+		"name": "MINI-TWITTER",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6855246"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_host}}/api/users",
+							"host": [
+								"{{local_host}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/{id}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_host}}/api/users/41",
+							"host": [
+								"{{local_host}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"41"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/{id}/conversations",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_host}}/api/users/41/conversations",
+							"host": [
+								"{{local_host}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"41",
+								"conversations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/{id}/followers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_host}}/api/users/41/followers",
+							"host": [
+								"{{local_host}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"41",
+								"followers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/{id}/following",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_host}}/api/users/41/following",
+							"host": [
+								"{{local_host}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"41",
+								"following"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/{id}/follow",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{local_host}}/api/users/41/follow?userId=42",
+							"host": [
+								"{{local_host}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"41",
+								"follow"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "42"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/{id}/conversations/{otherId}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_host}}/api/users/41/conversations/42",
+							"host": [
+								"{{local_host}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"41",
+								"conversations",
+								"42"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Post",
+			"item": [
+				{
+					"name": "posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_host}}/api/posts",
+							"host": [
+								"{{local_host}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "posts",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"content\": \"Hola desde API Platform!\",\n    \"user\": \"/api/users/41\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local_host}}/api/posts",
+							"host": [
+								"{{local_host}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "posts/{id}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_host}}/api/posts/201",
+							"host": [
+								"{{local_host}}"
+							],
+							"path": [
+								"api",
+								"posts",
+								"201"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "posts/{id}/like",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{local_host}}/api/posts/201/like?userId=41",
+							"host": [
+								"{{local_host}}"
+							],
+							"path": [
+								"api",
+								"posts",
+								"201",
+								"like"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "41"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "posts/{id}/bookmark",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{local_host}}/api/posts/201/bookmark?userId=41",
+							"host": [
+								"{{local_host}}"
+							],
+							"path": [
+								"api",
+								"posts",
+								"201",
+								"bookmark"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "41"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "posts/{id}/retweet",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{local_host}}/api/posts/201/retweet?userId=41",
+							"host": [
+								"{{local_host}}"
+							],
+							"path": [
+								"api",
+								"posts",
+								"201",
+								"retweet"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "41"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Hashtag",
+			"item": [
+				{
+					"name": "hashtags",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_host}}/api/hashtags",
+							"host": [
+								"{{local_host}}"
+							],
+							"path": [
+								"api",
+								"hashtags"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "hashtags/{id}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_host}}/api/hashtags/21",
+							"host": [
+								"{{local_host}}"
+							],
+							"path": [
+								"api",
+								"hashtags",
+								"21"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "hashtags/{id}/posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_host}}/api/hashtags/21/posts",
+							"host": [
+								"{{local_host}}"
+							],
+							"path": [
+								"api",
+								"hashtags",
+								"21",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Message",
+			"item": [
+				{
+					"name": "messages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_host}}/api/messages",
+							"host": [
+								"{{local_host}}"
+							],
+							"path": [
+								"api",
+								"messages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "messages",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"sender\": \"/api/users/41\",\n  \"receiver\": \"/api/users/42\",\n  \"content\": \"Hola! Este es un DM de prueba.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local_host}}/api/messages",
+							"host": [
+								"{{local_host}}"
+							],
+							"path": [
+								"api",
+								"messages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "messages/{id}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local_host}}/api/messages/1",
+							"host": [
+								"{{local_host}}"
+							],
+							"path": [
+								"api",
+								"messages",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "local_host",
+			"value": ""
+		},
+		{
+			"key": "prod_host",
+			"value": ""
+		}
+	]
+}

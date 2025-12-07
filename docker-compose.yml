@@ -11,8 +11,11 @@ services:
       - 8082:80
     networks:
       - edu-shared
+      - apps-shared
     tty: true
 
 networks:
   edu-shared:
+    external: true
+  apps-shared:
     external: true
