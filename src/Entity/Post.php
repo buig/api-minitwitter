@@ -2,48 +2,102 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post as ApiPost;
+use App\Controller\Post\ToggleBookmarkAction;
+use App\Controller\Post\ToggleLikeAction;
+use App\Controller\Post\ToggleRetweetAction;
 use App\Repository\PostRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    operations: [
+        new Get(),            // GET /api/posts/{id}
+        new GetCollection(),  // GET /api/posts
+        // POST normal para crear posts
+        new ApiPost(),           // POST /api/posts
+        // POST custom para like/unlike
+        new ApiPost(
+            uriTemplate: '/posts/{id}/like',
+            controller: ToggleLikeAction::class,
+            read: true, // que nos inyecte el Post a partir del {id}
+            deserialize: false, // no mapeamos el body a la entidad
+            write: false, // no necesitamos deserializar JSON
+            name: 'post_like'
+        ),
+        new ApiPost(
+            uriTemplate: '/posts/{id}/bookmark',
+            controller: ToggleBookmarkAction::class,
+            read: true,
+            deserialize: false,
+            write: false,
+            name: 'post_bookmark'
+        ),
+        new ApiPost(
+            uriTemplate: '/posts/{id}/retweet',
+            controller: ToggleRetweetAction::class,
+            read: true,
+            deserialize: false,
+            write: false,
+            name: 'post_retweet'
+        ),
+    ],
+    normalizationContext: ['groups' => ['post:read']],
+    denormalizationContext: ['groups' => ['post:write']],
+)]
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
 {
+    #[Groups(['post:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['post:read', 'post:write'])]
     #[ORM\Column(length: 280)]
     private ?string $content = null;
 
+    #[Groups(['post:read'])]
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[Groups(['post:read'])]
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[Groups(['post:read'])]
     #[ORM\Column]
     private ?int $likesCount = null;
 
+    #[Groups(['post:read'])]
     #[ORM\Column]
     private ?int $retweetsCount = null;
 
+    #[Groups(['post:read'])]
     #[ORM\Column]
     private ?int $bookmarksCount = null;
 
+    #[Groups(['post:read'])]
     #[ORM\Column]
     private ?int $repliesCount = null;
 
+    #[Groups(['post:read', 'post:write'])]
     #[ORM\ManyToOne(inversedBy: 'posts')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    #[Groups(['post:read', 'post:write'])]
     #[ORM\ManyToOne(targetEntity: self::class)]
     #[ORM\JoinColumn(nullable: true)]
     private ?self $inReplyTo = null;
 
+    #[Groups(['post:read', 'post:write'])]
     #[ORM\ManyToOne(targetEntity: self::class)]
     #[ORM\JoinColumn(nullable: true)]
     private ?self $repostOf = null;
@@ -66,7 +120,7 @@ class Post
     #[ORM\OneToMany(targetEntity: Bookmark::class, mappedBy: 'post', orphanRemoval: true)]
     private Collection $bookmarks;
 
-    #[ORM\OneToMany(mappedBy: 'post', targetEntity: PostHashtag::class, orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: PostHashtag::class, mappedBy: 'post', orphanRemoval: true)]
     private Collection $postHashtags;
 
     public function __construct()
@@ -344,5 +398,17 @@ class Post
         }
 
         return $this;
+    }
+
+    /**
+     * Devuelve solo los hashtags (no los PostHashtag).
+     */
+    #[Groups(['post:read'])]
+    public function getHashtags(): array
+    {
+        return array_map(
+            fn (PostHashtag $ph) => $ph->getHashtag(),
+            $this->postHashtags->toArray()
+        );
     }
 }

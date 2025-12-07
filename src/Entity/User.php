@@ -2,40 +2,101 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post as ApiPost;
+use ApiPlatform\Metadata\GetCollection as ApiGetCollection;
+use App\Controller\User\GetConversationMessagesAction;
+use App\Controller\User\ListConversationsAction;
+use App\Controller\User\ListFollowersAction;
+use App\Controller\User\ListFollowingAction;
+use App\Controller\User\ToggleFollowAction;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    operations: [
+        new Get(),           // GET /api/users/{id}
+        new GetCollection(), // GET /api/users
+        new ApiGetCollection(
+            uriTemplate: '/users/{id}/conversations',
+            controller: ListConversationsAction::class,
+            read: false,
+            deserialize: false,
+            name: 'user_conversations'
+        ),
+        new ApiGetCollection(
+            uriTemplate: '/users/{id}/conversations/{otherId}',
+            controller: GetConversationMessagesAction::class,
+            read: false,
+            deserialize: false,
+            name: 'user_conversation_messages'
+        ),
+        new ApiPost(
+            uriTemplate: '/users/{id}/follow',
+            controller: ToggleFollowAction::class,
+            read: false,
+            deserialize: false,
+            name: 'user_follow'
+        ),
+        new ApiGetCollection(
+            uriTemplate: '/users/{id}/followers',
+            controller: ListFollowersAction::class,
+            read: false,
+            deserialize: false,
+            name: 'user_followers'
+        ),
+        new ApiGetCollection(
+            uriTemplate: '/users/{id}/following',
+            controller: ListFollowingAction::class,
+            read: false,
+            deserialize: false,
+            name: 'user_following'
+        ),
+    ],
+    normalizationContext: ['groups' => ['user:read']],
+)]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
 {
+    #[Groups(['user:read', 'post:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['user:read', 'post:read'])]
     #[ORM\Column(length: 50)]
     private ?string $username = null;
 
+    #[Groups(['user:read'])]
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
     private ?string $passwordHash = null;
 
+    #[Groups(['user:read', 'post:read'])]
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $name = null;
 
+    #[Groups(['user:read', 'post:read'])]
     #[ORM\Column(length: 160, nullable: true)]
     private ?string $bio = null;
 
+    #[Groups(['user:read', 'post:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $avatarUrl = null;
 
+    #[Groups(['user:read'])]
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[Groups(['user:read'])]
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 

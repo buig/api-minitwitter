@@ -2,11 +2,31 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\GetCollection as ApiGetCollection;
+use App\Controller\Hashtag\HashtagPostsAction;
 use App\Repository\HashtagRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
+#[ApiResource(
+    operations: [
+        new Get(),           // GET /api/hashtags/{id}
+        new GetCollection(), // GET /api/hashtags
+        new ApiGetCollection(
+            uriTemplate: '/hashtags/{id}/posts',
+            controller: HashtagPostsAction::class,
+            read: false,
+            deserialize: false,
+            name: 'hashtag_posts'
+        ),
+    ],
+    normalizationContext: ['groups' => ['hashtag:read']],
+)]
 #[ORM\Entity(repositoryClass: HashtagRepository::class)]
 #[ORM\Table(name: 'hashtags')]
 #[ORM\UniqueConstraint(
@@ -15,19 +35,22 @@ use Doctrine\ORM\Mapping as ORM;
 )]
 class Hashtag
 {
+    #[Groups(['hashtag:read', 'post:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     // guardamos sin # y en minúsculas
+    #[Groups(['hashtag:read', 'post:read'])]
     #[ORM\Column(length: 100)]
     private ?string $tag = null;
 
+    #[Groups(['hashtag:read'])]
     #[ORM\Column]
     private \DateTimeImmutable $createdAt;
 
-    #[ORM\OneToMany(mappedBy: 'hashtag', targetEntity: PostHashtag::class, orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: PostHashtag::class, mappedBy: 'hashtag', orphanRemoval: true)]
     private Collection $postHashtags;
 
     public function __construct()
